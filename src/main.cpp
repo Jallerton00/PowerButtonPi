@@ -33,6 +33,7 @@ void setup()
 
 void loop()
 {
+    // read (and flip as active low) latching input
     powerButtonState = !digitalRead(powerButtonPin);
 
     // if powerButtonState changes, we've pressed the button, therefore temporarily press motherboard power
@@ -73,13 +74,10 @@ void loop()
             LEDToControl -= 1;
         }
         
-        if (LEDToControl == numberOfLEDs - 1)
+        // if reach ends, flip direction
+        if ((LEDToControl == numberOfLEDs - 1) || LEDToControl == 0)
         {
-            ledDirectionUp = false;
-        }
-        else if (LEDToControl == 0)
-        {
-            ledDirectionUp = true;
+            ledDirectionUp = !ledDirectionUp;
         }
         
     }
