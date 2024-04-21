@@ -11,6 +11,8 @@ constexpr int numberOfLEDs = (sizeof(LEDPin) / sizeof(int));
 bool powerButtonState = false;
 bool previousPowerButtonState = false;
 
+bool ledDirectionUp = true;
+
 int LEDToControl = 0;
 
 void setup()
@@ -62,11 +64,24 @@ void loop()
 
     if (powerButtonState) //only animate when power is on
     {
-        LEDToControl += 1;
-        if (LEDToControl == numberOfLEDs)
+        if (ledDirectionUp)
         {
-            LEDToControl = 0;
+            LEDToControl += 1;
         }
+        else
+        {
+            LEDToControl -= 1;
+        }
+        
+        if (LEDToControl == numberOfLEDs - 1)
+        {
+            ledDirectionUp = false;
+        }
+        else if (LEDToControl == 0)
+        {
+            ledDirectionUp = true;
+        }
+        
     }
     
     // delay for animations and switch output.
