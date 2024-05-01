@@ -4,7 +4,9 @@ const int powerButtonPin = 1;
 const int powerLEDPin = 5;
 const int LEDPin[] = {18, 19, 20, 21};
 
-const int switchOutput = 16; // bottom right
+const int switchOutput = 22;
+const int pwrLEDInput = 17;
+const int hddLEDInput = 16;
 
 constexpr int numberOfLEDs = (sizeof(LEDPin) / sizeof(int));
 
@@ -17,9 +19,12 @@ int LEDToControl = 0;
 
 void setup()
 {
-    pinMode(powerButtonPin, INPUT_PULLUP);
+
+    pinMode(powerButtonPin, INPUT);
+    pinMode(pwrLEDInput, INPUT_PULLDOWN);
     pinMode(powerLEDPin, OUTPUT);
     pinMode(switchOutput, OUTPUT);
+    pinMode(LED_BUILTIN, OUTPUT);
 
     for (int i = 0; i < numberOfLEDs; i++)
     {
@@ -46,6 +51,8 @@ void loop()
     {
         digitalWrite(switchOutput, false);
     }
+
+    digitalWrite(LED_BUILTIN, digitalRead(pwrLEDInput));
 
     // LED on switch should copy powerButtonState
     digitalWrite(powerLEDPin, powerButtonState);
