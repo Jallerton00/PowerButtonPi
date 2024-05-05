@@ -1,3 +1,4 @@
+name: kicad-automations
 on:
   workflow_dispatch:
   push:
