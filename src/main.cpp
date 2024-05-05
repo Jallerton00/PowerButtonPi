@@ -13,6 +13,8 @@ constexpr int numberOfLEDs = (sizeof(LEDPin) / sizeof(int));
 bool powerButtonState = false;
 bool previousPowerButtonState = false;
 
+bool reportedPCState = false;
+
 bool ledDirectionUp = true;
 
 int LEDToControl = 0;
@@ -20,9 +22,11 @@ int LEDToControl = 0;
 void setup()
 {
 
-    pinMode(powerButtonPin, INPUT);
-    pinMode(pwrLEDInput, INPUT_PULLDOWN);
+    pinMode(powerButtonPin, INPUT_PULLUP);
+    pinMode(pwrLEDInput, INPUT);
+    pinMode(hddLEDInput, INPUT);
     pinMode(powerLEDPin, OUTPUT);
+
     pinMode(switchOutput, OUTPUT);
     pinMode(LED_BUILTIN, OUTPUT);
 
@@ -41,24 +45,29 @@ void loop()
     // read (and flip as active low) latching input
     powerButtonState = !digitalRead(powerButtonPin);
 
-    // if powerButtonState changes, we've pressed the button, therefore temporarily press motherboard power
-    if (previousPowerButtonState != powerButtonState)
+    reportedPCState = digitalRead(pwrLEDInput);
+
+    // IF powerButtonState changes, we've pressed the button
+    // AND the new state is not the same as the one reported by the PC Power LED
+    // THEN temporarily press motherboard power
+    if ((previousPowerButtonState != powerButtonState) && (powerButtonState!=reportedPCState))
     {
         digitalWrite(switchOutput, true);
-        previousPowerButtonState = powerButtonState;
     }
     else
     {
         digitalWrite(switchOutput, false);
     }
-
-    digitalWrite(LED_BUILTIN, digitalRead(pwrLEDInput));
+    
+    digitalWrite(LED_BUILTIN, reportedPCState);
+    digitalWrite(LEDPin[2], !reportedPCState);
+    digitalWrite(LEDPin[3], !digitalRead(hddLEDInput));
 
     // LED on switch should copy powerButtonState
     digitalWrite(powerLEDPin, powerButtonState);
 
     // animate other LEDs. For some reason
-    for (int i = 0; i < numberOfLEDs; i++)
+    for (int i = 0; i < 2; i++)
     {
         if (i == LEDToControl)
         {
@@ -82,7 +91,7 @@ void loop()
         }
         
         // if reach ends, flip direction
-        if ((LEDToControl == numberOfLEDs - 1) || LEDToControl == 0)
+        if ((LEDToControl == 2 - 1) || LEDToControl == 0)
         {
             ledDirectionUp = !ledDirectionUp;
         }
@@ -92,4 +101,6 @@ void loop()
     // delay for animations and switch output.
     // This may need splitting into millis vars rather than blocking with delay
     delay(200);
+
+    previousPowerButtonState = powerButtonState;
 }
