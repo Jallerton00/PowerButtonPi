@@ -17,12 +17,12 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
 
-      - name: Render PCB images
-        uses: linalinn/kicad-render@main
-        with:
-          pcb_file: ${{ github.workspace }}/hardware/PowerButtonPi.kicad_pcb
-          output_path: ${{ github.workspace }}/hardware/images
-          animation: gif # Animation
+      # - name: Render PCB images
+      #   uses: linalinn/kicad-render@main
+      #   with:
+      #     pcb_file: ${{ github.workspace }}/hardware/PowerButtonPi.kicad_pcb
+      #     output_path: ${{ github.workspace }}/hardware/images
+      #     animation: gif # Animation
       
       # - name: Run KiCad DRC
       #   id: drc
