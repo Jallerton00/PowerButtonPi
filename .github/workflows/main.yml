@@ -44,7 +44,22 @@ jobs:
           pcb_gerbers: true # Generate Gerbers
           pcb_gerbers_file: PowerButtonPi.zip
           
+      # - name: Upload output
+      #   uses: stefanzweifel/git-auto-commit-action@v5
+      #   with:
+      #     commit_message: Update images, schematic and gerbers
+
       - name: Upload output
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update images, schematic and gerbers
+          branch: automation/update-resources
+          create_branch: true
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6.0.5
+        with:
+          branch: automation/update-resources
+          delete-branch: true
+          title: 'Automated KiCAD export'
+          body: Update KiCAD resources (images, schematics and gerbers)
