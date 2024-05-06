@@ -19,6 +19,13 @@ bool ledDirectionUp = true;
 
 int LEDToControl = 0;
 
+void setLED(uint8_t index, bool on)
+{
+    digitalWrite(LEDPin[index], !on);
+    // LEDs are powered on when GPIO pulled low
+    // Therefore LED is on when digitalWrite(LEDPin[0], false);
+}
+
 void setup()
 {
 
@@ -33,11 +40,10 @@ void setup()
     for (int i = 0; i < numberOfLEDs; i++)
     {
         pinMode(LEDPin[i], OUTPUT);
-        digitalWrite(LEDPin[i], false);
+        setLED(i, false);
     }
 
-    // LEDs are powered on when GPIO pulled low
-    // Therefore LED is on when digitalWrite(LEDPin[0], false);
+    
 }
 
 void loop()
@@ -60,8 +66,8 @@ void loop()
     }
     
     digitalWrite(LED_BUILTIN, reportedPCState);
-    digitalWrite(LEDPin[2], !reportedPCState);
-    digitalWrite(LEDPin[3], !digitalRead(hddLEDInput));
+    setLED(2, reportedPCState);
+    setLED(3, digitalRead(hddLEDInput));
 
     // LED on switch should copy powerButtonState
     digitalWrite(powerLEDPin, powerButtonState);
@@ -71,11 +77,11 @@ void loop()
     {
         if (i == LEDToControl)
         {
-            digitalWrite(LEDPin[i], false);
+            setLED(i, false);
         }
         else
         {
-            digitalWrite(LEDPin[i], true);
+            setLED(i, false);
         }
     }
 
