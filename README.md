@@ -10,3 +10,5 @@ Use a Pi Pico to emulate a PC power button (and drive some LEDs).
 ![PCB Bottom](hardware/images/bottom.png)
 
 [PDF Schematic](/hardware/schematic.pdf)
+
+(ATX interaction ~~stolen~~ borrowed from [PiKVM](https://docs.pikvm.org/v1/#setting-up-the-hardware)).
