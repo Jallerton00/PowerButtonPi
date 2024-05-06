@@ -77,7 +77,7 @@ void loop()
     {
         if (i == LEDToControl)
         {
-            setLED(i, false);
+            setLED(i, true);
         }
         else
         {
